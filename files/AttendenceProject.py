@@ -9,13 +9,12 @@ path = 'images'
 images = []
 classnames = []
 myList = os.listdir(path)
-print(myList)
+
 
 for cl in myList:
     curImg = cv2.imread(f'{path}\{cl}')
     images.append(curImg)                                       # this will call image by its name
     classnames.append(os.path.splitext(cl)[0])
-print(classnames)
 
 
 def findencodings(images):
@@ -27,7 +26,7 @@ def findencodings(images):
     return encodeList
 
 encodeListknown = findencodings(images)
-print('encoding complete')
+
 
 cap = cv2.VideoCapture(0)
 
@@ -43,12 +42,12 @@ while True:
     for encodeface,faceloc in zip(encodeCurFrame,facesCurFrame):
         match = face_recognition.compare_faces(encodeListknown,encodeface)
         facedist = face_recognition.face_distance(encodeListknown,encodeface)
-        #print(facedist)
+
         matchIndex = np.argmin(facedist)        #this will give no. from 0 e.g. 0  1  2
 
         if match[matchIndex]:
             name = classnames[matchIndex].upper()
-            print(name)
+
             y1,x2,y2,x1 = faceloc
             y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
             cv2.rectangle(img,(x1,y1),(x2,y2),(0,255,0),2)
